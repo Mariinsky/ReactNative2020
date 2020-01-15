@@ -9,9 +9,9 @@ const List = (props) => {
   const [media, setMedia] = useContext(MediaContext);
   const [data, loading] = getAllMedia();
 
-  useEffect(() => {
+
     setMedia(data);
-  }, [loading]);
+
    return (
     <FlatList
       data={media}

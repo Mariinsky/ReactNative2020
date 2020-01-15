@@ -5,7 +5,7 @@ import List from "../components/List";
 const Home = (props) => {
   const {navigation} = props;
   return (
-    <View style={{paddingTop: 30}}>
+    <View style={{paddingTop: 10}}>
       <List navigation={navigation}/>
     </View>
   );
