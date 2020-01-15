@@ -5,7 +5,7 @@ import { getAllMedia } from "../hooks/APIhooks";
 const MediaContext = React.createContext([{}, () => {}]);
 
 const MediaProvider = props => {
-  const [media, setMedia] = useState([]);
+  const [media, setMedia] = useState();
   const [data, loading] = getAllMedia();
 
   useEffect(() => {

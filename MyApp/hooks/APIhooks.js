@@ -5,16 +5,20 @@ const getAllMedia = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchUrl = async () => {
-    const response = await fetch(apiUrl + "media");
-    const json = await response.json();
-    const result = await Promise.all(
-      json.map(async item => {
-        const response = await fetch(apiUrl + "media/" + item.file_id);
-        return await response.json();
-      })
-    );
-    setData(result);
-    setLoading(false);
+    try {
+      const response = await fetch(apiUrl + "media");
+      const json = await response.json();
+      const result = await Promise.all(
+        json.map(async item => {
+          const response = await fetch(apiUrl + "media/" + item.file_id);
+          return await response.json();
+        })
+      );
+      setData(result);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
   useEffect(() => {
     fetchUrl();
