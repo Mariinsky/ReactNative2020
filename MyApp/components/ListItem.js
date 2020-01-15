@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const ListItem = props => {
   return (
     <TouchableOpacity
-      onPress={() => console.log(props.singleMedia.filename)}
+      onPress={() =>console.log(props.singleMedia.filename)}
       style={{
         backgroundColor: "darkgrey",
         marginBottom: 10,
