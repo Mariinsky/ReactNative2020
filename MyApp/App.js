@@ -1,17 +1,13 @@
 import React from "react";
-import { View } from "react-native";
-import List from "./components/List";
+import Navigator from './navigators/Navigator'
 import {MediaProvider} from './contexts/MediaContext'
-
-
 
 const App = () => {
   return (
-    <View style={{paddingTop: 30}}>
-      <MediaProvider>
-          <List/>
-      </MediaProvider>
-    </View>
+    <MediaProvider>
+        <Navigator />
+    </MediaProvider>
+
   );
 };
 

@@ -2,16 +2,21 @@ import React from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import PropTypes from "prop-types";
 
-const url = 'http://media.mw.metropolia.fi/wbma/uploads/'
-const ListItem = props => {
+const url = "http://media.mw.metropolia.fi/wbma/uploads/";
+const ListItem = (props) => {
   return (
     <TouchableOpacity
-      onPress={() =>console.log(props.singleMedia.filename)}
+      onPress={() => {
+        props.navigation.push("Single", {
+          filename: props.singleMedia.filename,
+          title: props.singleMedia.title
+        });
+      }}
       style={{
         backgroundColor: "darkgrey",
         marginBottom: 10,
         flexDirection: "row",
-        padding: 10,
+        padding: 10
       }}
     >
       <Image
