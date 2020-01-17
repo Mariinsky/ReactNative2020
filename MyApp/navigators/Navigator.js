@@ -32,10 +32,29 @@ const Navigator = createStackNavigator(
         screen: TabNavigator,
         navigationOptions: {
           headerMode: 'none', // this will hide the header
+          headerStyle: {
+            height: 30,
+            backgroundColor: '#f3e5f5',
+          },
+
+          headerTintColor: '#6a1b9a',
+          headerTitleStyle: {
+          fontWeight: 'bold',
+    },
         },
       },
       Single: {
         screen: Single,
+        navigationOptions: {
+          headerMode: 'none', // this will hide the header
+          headerStyle: {
+            backgroundColor: '#f3e5f5',
+          },
+          headerTintColor: '#6a1b9a',
+          headerTitleStyle: {
+          fontWeight: 'bold',
+    },
+        },
       },
     },
 );

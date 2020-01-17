@@ -1,5 +1,8 @@
 {
   "expo": {
+    "androidStatusBar": {
+      "backgroundColor": "#C2185B"
+    },
     "name": "MyApp",
     "slug": "MyApp",
     "privacy": "public",
@@ -15,7 +18,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ce93d8"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

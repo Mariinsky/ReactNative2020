@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Image, TouchableOpacity, Text } from "react-native";
+import { Dimensions, View, Image, TouchableOpacity, Text } from "react-native";
 import PropTypes from "prop-types";
 
 const url = "http://media.mw.metropolia.fi/wbma/uploads/";
-const ListItem = (props) => {
+const ListItem = props => {
   return (
     <TouchableOpacity
       onPress={() => {
@@ -13,21 +13,39 @@ const ListItem = (props) => {
         });
       }}
       style={{
-        backgroundColor: "darkgrey",
-        marginBottom: 10,
+        backgroundColor: '#fff',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 0.3,
+
+        elevation: 5,
+        marginHorizontal: 10,
+        marginVertical: 5,
         flexDirection: "row",
         padding: 10
       }}
     >
       <Image
-        style={{ width: null, height: 160, flex: 1 }}
+        style={{
+          borderRadius:
+            Math.round(
+              Dimensions.get("window").width + Dimensions.get("window").height
+            ) / 2,
+          width: Dimensions.get("window").width * 0.35,
+          height: Dimensions.get("window").width * 0.35,
+          margin: 10
+        }}
         source={{ uri: url + props.singleMedia.thumbnails.w160 }}
       />
-      <View style={{ flex: 1, marginLeft: 5 }}>
+      <View style={{ flex: 1, marginLeft: 10 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>
           {props.singleMedia.title}
         </Text>
-        <Text>{props.singleMedia.description}</Text>
+        <Text style= {{paddingTop: 5}}>{props.singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
   );
