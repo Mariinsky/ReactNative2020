@@ -11,6 +11,7 @@ const TabNavigator = createBottomTabNavigator(
         screen: Home,
         navigationOptions: {
           title: 'Home',
+
         },
       },
       Profile: {
@@ -22,7 +23,18 @@ const TabNavigator = createBottomTabNavigator(
     },
     {
       initialRouteName: 'Home',
+      tabBarOptions: {
+
+        activeTintColor: 'tomato',
+        inactiveTintColor: 'gray',
+        activeBackgroundColor: '#6a1b9a',
+        labelStyle:{
+          fontSize: 20,
+          fontWeight: 'bold'
+        }
+      }
     }
+
 );
 
 const Navigator = createStackNavigator(
@@ -33,8 +45,7 @@ const Navigator = createStackNavigator(
         navigationOptions: {
           headerMode: 'none', // this will hide the header
           headerStyle: {
-            height: 30,
-            backgroundColor: '#f3e5f5',
+                       backgroundColor: '#f3e5f5',
           },
 
           headerTintColor: '#6a1b9a',
