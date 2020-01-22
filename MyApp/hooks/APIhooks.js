@@ -6,16 +6,16 @@ const getAllMedia = () => {
   const [loading, setLoading] = useState(true);
   const fetchUrl = async () => {
     try {
-      const response = await fetch(apiUrl + "media");
-      const json = await response.json();
-      const result = await Promise.all(
-        json.map(async item => {
-          const response = await fetch(apiUrl + "media/" + item.file_id);
-          return await response.json();
-        })
-      );
-      setData(result);
-      setLoading(false);
+    const response = await fetch(apiUrl + "media");
+    const json = await response.json();
+    const result = await Promise.all(
+      json.map(async item => {
+        const response = await fetch(apiUrl + "media/" + item.file_id);
+        return await response.json();
+      })
+    );
+    setData(result);
+    setLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -26,4 +26,20 @@ const getAllMedia = () => {
   return [data, loading];
 };
 
-export { getAllMedia };
+const login = async (url,inputs) => {
+  console.log(url);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(inputs)
+    })
+    return await response.json();
+  } catch (e) {
+    console.log('erroor', e.message)
+  }
+}
+
+export { getAllMedia, login };
