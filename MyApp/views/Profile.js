@@ -42,6 +42,7 @@ const Profile = props => {
               username: {user.username}
             </Text>
           </CardItem>
+          <Body>
           <CardItem bordered>
             <Image
               style={{
@@ -52,6 +53,7 @@ const Profile = props => {
               source={{ uri: url + user.picture }}
             />
           </CardItem>
+          </Body>
           <CardItem bordered>
             <Body>
               <Text>email: {user.email}</Text>
