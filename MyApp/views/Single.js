@@ -1,33 +1,26 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { Image } from "react-native";
+import { Container, Body, Text} from 'native-base'
 
 const Single = props => {
   const { navigation } = props;
   return (
-    <View style={styles.container}>
-      <Text>{ navigation.getParam("title", "no_title")}</Text>
+    <Container>
+      <Body>
       <Image
-        style={{ width: '100%', height: null, flex: 1, resizeMode: "contain"}}
+        style={{width: 300, height: 300, resizeMode: 'contain', marginTop:20}}
         source={{
           uri:
             "http://media.mw.metropolia.fi/wbma/uploads/" +
             navigation.getParam("filename", "no_filename")
         }}
       />
-
-    </View>
+      <Text style={{fontSize: 30, fontWeight: 'bold'}}>{ navigation.getParam("title", "no_title")}</Text>
+      <Text style={{marginTop: 10}}>{navigation.getParam('description', 'no_descrtiption')}</Text>
+      </Body>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 40,
-
-  }
-});
 
 export default Single;

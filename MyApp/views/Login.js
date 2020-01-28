@@ -1,9 +1,10 @@
 import React from "react";
 import useSignUpForm from "../hooks/LoginHooks";
 import FormTextInput from "../components/FormTextInput";
-import { StyleSheet, View, Text, Button, AsyncStorage } from "react-native";
+import { AsyncStorage } from "react-native";
 import propTypes from 'prop-types';
-import { login } from "../hooks/APIhooks";
+import { login, getProfilePic } from "../hooks/APIhooks";
+import { Button, Container, Form, Item, Body, Text, Label } from 'native-base';
 
 const Login = props => {
   // props is needed for navigation
@@ -16,6 +17,9 @@ const Login = props => {
   const signInAsync = async () => {
     try {
       const json = await login("http://media.mw.metropolia.fi/wbma/login", inputs);
+      const pic = await getProfilePic(json);
+      json.user.picture = pic[0].filename;
+      console.log(json.user);
       await AsyncStorage.setItem("user", JSON.stringify(json.user));
       await AsyncStorage.setItem("userToken", json.token);
       props.navigation.navigate("App");
@@ -37,55 +41,63 @@ const Login = props => {
     }
   };
   return (
-    <View style={styles.container}>
-      <Text>Login</Text>
-      <View style={styles.form}>
-        <FormTextInput
+    <Container>
+      <Form>
+        <Item style={{borderColor: 'transparent'}}>
+      <Body><Label style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>Login</Label></Body>
+      </Item>
+<Item>
+          <FormTextInput
           autoCapitalize="none"
           placeholder="username"
           onChangeText={handleUsernameChange}
         />
+        </Item>
+        <Item>
         <FormTextInput
           autoCapitalize="none"
           placeholder="password"
           secureTextEntry={true}
           onChangeText={handlePasswordChange}
         />
-        <Button title="Sign in!" onPress={signInAsync} />
-      </View>
-      <Text>Register</Text>
-      <View style={styles.form}>
+        </Item>
+        </Form>
+        <Button onPress={signInAsync}><Body><Text style={{fontWeight: "bold", color: 'white'}}>Sign In</Text></Body></Button>
+
+<Form>
+  <Item style={{borderColor: 'transparent'}}>
+  <Body><Label style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>Register</Label></Body>
+      </Item>
+      <Item>
         <FormTextInput
           autoCapitalize="none"
           placeholder="username"
           onChangeText={handleUsernameChange}
         />
+
+        </Item>
+        <Item>
         <FormTextInput
           autoCapitalize="none"
           placeholder="password"
           secureTextEntry={true}
           onChangeText={handlePasswordChange}
         />
+
+        </Item>
+        <Item>
         <FormTextInput
           autoCapitalize="none"
           placeholder="email"
           onChangeText={handleEmailChange}
         />
-        <Button title="Register!" onPress={registerInAsync} />
-      </View>
-    </View>
+        </Item>
+        <Button onPress={registerInAsync}><Body><Text style={{fontWeight: "bold", color: 'white'}}>Register</Text></Body></Button>
+        </Form>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 40
-  }
-});
 
 // proptypes here
 Login.propTypes = {

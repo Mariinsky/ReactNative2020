@@ -1,53 +1,46 @@
 import React from "react";
-import { Dimensions, View, Image, TouchableOpacity, Text } from "react-native";
+import { Dimensions, Image } from "react-native";
 import PropTypes from "prop-types";
+import { ListItem as Item, Text, Left, Body, Button, Right } from "native-base";
 
 const url = "http://media.mw.metropolia.fi/wbma/uploads/";
 const ListItem = props => {
   return (
-    <TouchableOpacity
-      onPress={() => {
-        props.navigation.push("Single", {
-          filename: props.singleMedia.filename,
-          title: props.singleMedia.title
-        });
-      }}
-      style={{
-        backgroundColor: '#fff',
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 0.3,
+    <Item>
+      <Left>
+        <Image
+          style={{
+            borderRadius:
+              Math.round(
+                Dimensions.get("window").width + Dimensions.get("window").height
+              ) / 2,
+            width: Dimensions.get("window").width * 0.15,
+            height: Dimensions.get("window").width * 0.15,
+            margin: 10
+          }}
+          source={{ uri: url + props.singleMedia.thumbnails.w160 }}
+        />
 
-        elevation: 5,
-        marginHorizontal: 10,
-        marginVertical: 5,
-        flexDirection: "row",
-        padding: 10
-      }}
-    >
-      <Image
-        style={{
-          borderRadius:
-            Math.round(
-              Dimensions.get("window").width + Dimensions.get("window").height
-            ) / 2,
-          width: Dimensions.get("window").width * 0.35,
-          height: Dimensions.get("window").width * 0.35,
-          margin: 10
-        }}
-        source={{ uri: url + props.singleMedia.thumbnails.w160 }}
-      />
-      <View style={{ flex: 1, marginLeft: 10 }}>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-          {props.singleMedia.title}
-        </Text>
-        <Text style= {{paddingTop: 5}}>{props.singleMedia.description}</Text>
-      </View>
-    </TouchableOpacity>
+        <Body>
+          <Text style={{ fontWeight: "bold" }}>{props.singleMedia.title}</Text>
+          <Text>{props.singleMedia.description}</Text>
+        </Body>
+      </Left>
+      <Right>
+        <Button
+          primary
+          onPress={() => {
+            props.navigation.push("Single", {
+              filename: props.singleMedia.filename,
+              title: props.singleMedia.title,
+              description: props.singleMedia.description
+            });
+          }}
+        >
+          <Text>View</Text>
+        </Button>
+      </Right>
+    </Item>
   );
 };
 

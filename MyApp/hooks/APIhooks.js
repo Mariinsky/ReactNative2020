@@ -36,10 +36,19 @@ const login = async (url,inputs) => {
       },
       body: JSON.stringify(inputs)
     })
-    return await response.json();
+    const user = response.json();
+    return user;
   } catch (e) {
     console.log('erroor', e.message)
   }
 }
+const getProfilePic = async ({user}) => {
+  try {
+    const response = await fetch(apiUrl + 'tags/avatar_' + user.user_id);
+    return response.json();
+  } catch (e) {
+     console.log(e.message)
+  }
+}
 
-export { getAllMedia, login };
+export { getAllMedia, login, getProfilePic };

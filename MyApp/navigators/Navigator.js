@@ -6,37 +6,37 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import AuthLoading from '../views/AuthLoading';
 import Login from '../views/Login';
+import React from 'react';
+import { Icon } from 'native-base'
 
 const TabNavigator = createBottomTabNavigator(
-    {
-      Home: {
-        screen: Home,
-        navigationOptions: {
-          title: 'Home',
+  {
+    Home,
+    Profile,
+  },
 
-        },
-      },
-      Profile: {
-        screen: Profile,
-        navigationOptions: {
-          title: 'Profile',
-        },
-      },
-    },
-    {
-      initialRouteName: 'Home',
-      tabBarOptions: {
-
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
-        activeBackgroundColor: '#6a1b9a',
-        labelStyle:{
-          fontSize: 20,
-          fontWeight: 'bold'
+  {
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon: () => {
+        const {routeName} = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = 'home';
+        } else if (routeName === 'Profile') {
+          iconName = 'person';
         }
-      }
-    }
 
+        // You can return any component that you like here!
+        return <Icon
+          name={iconName}
+          size={25}
+        />;
+      },
+    }),
+    tabBarOptions: {
+      showLabel: false,
+    },
+  }
 );
 
 const StackNavigator = createStackNavigator(

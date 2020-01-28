@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, AsyncStorage } from "react-native";
+import { AsyncStorage, Image, Dimensions } from "react-native";
+import {
+  Container,
+  Text,
+  Button,
+  Body,
+  Icon,
+  Content,
+  Card,
+  CardItem,
+  Label
+} from "native-base";
 
+const url = "http://media.mw.metropolia.fi/wbma/uploads/";
 const fetchUser = () => {
   const [user, setUser] = useState([]);
   const getUser = async () => {
@@ -9,7 +21,7 @@ const fetchUser = () => {
   };
   useEffect(() => {
     getUser();
-  })
+  });
 
   return user;
 };
@@ -21,32 +33,41 @@ const Profile = props => {
   };
   const user = fetchUser();
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>username: {user.username}</Text>
-      <Text style={styles.text}>email: {user.email}</Text>
-      <View style={styles.logout}>
-        <Button title="Logout!" onPress={signOutAsync} />
-      </View>
-    </View>
+    <Container>
+      <Content>
+        <Card>
+          <CardItem bordered>
+            <Icon name="person" />
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              username: {user.username}
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Image
+              style={{
+                width: Dimensions.get("window").width * 0.9,
+            height: Dimensions.get("window").width * 0.9,
+
+              }}
+              source={{ uri: url + user.picture }}
+            />
+          </CardItem>
+          <CardItem bordered>
+            <Body>
+              <Text>email: {user.email}</Text>
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Button style={{ flex: 1 }} onPress={signOutAsync}>
+              <Body>
+                <Label style={{ color: "white" }}>Logout</Label>
+              </Body>
+            </Button>
+          </CardItem>
+        </Card>
+      </Content>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingTop: 40
-  },
-  text: {
-    paddingBottom: 10,
-    fontSize: 20
-  },
-  logout: {
-    alignSelf: "stretch",
-    margin: 30
-  }
-});
 
 export default Profile;
