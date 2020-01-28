@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import useSignUpForm from "../hooks/LoginHooks";
 import FormTextInput from "../components/FormTextInput";
 import { AsyncStorage } from "react-native";
-import propTypes from 'prop-types';
+import propTypes from "prop-types";
 import { login, getProfilePic } from "../hooks/APIhooks";
-import { Button, Container, Form, Item, Body, Text, Label } from 'native-base';
+import { Button, Container, Form, Item, Body, Text, Label } from "native-base";
 
 const Login = props => {
   // props is needed for navigation
@@ -16,7 +16,10 @@ const Login = props => {
   } = useSignUpForm();
   const signInAsync = async () => {
     try {
-      const json = await login("http://media.mw.metropolia.fi/wbma/login", inputs);
+      const json = await login(
+        "http://media.mw.metropolia.fi/wbma/login",
+        inputs
+      );
       const pic = await getProfilePic(json);
       json.user.picture = pic[0].filename;
       console.log(json.user);
@@ -29,79 +32,109 @@ const Login = props => {
   };
   const registerInAsync = async () => {
     try {
-      const json = await login("http://media.mw.metropolia.fi/wbma/users",inputs);
-      console.log('register', json);
+      const json = await login(
+        "http://media.mw.metropolia.fi/wbma/users",
+        inputs
+      );
+      console.log("register", json);
       if (json.user_id) {
-       signInAsync()
+        signInAsync();
       } else {
-        alert('registration failed.');
+        alert("registration failed.");
       }
     } catch (e) {
-      console.log('register error', e);
+      console.log("register error", e);
     }
   };
+  const changeLoginStatus = () => setLogin(!login);
+  let [login, setLogin] = useState(true);
   return (
     <Container>
-      <Form>
-        <Item style={{borderColor: 'transparent'}}>
-      <Body><Label style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>Login</Label></Body>
-      </Item>
-<Item>
-          <FormTextInput
-          autoCapitalize="none"
-          placeholder="username"
-          onChangeText={handleUsernameChange}
-        />
-        </Item>
-        <Item>
-        <FormTextInput
-          autoCapitalize="none"
-          placeholder="password"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-        />
-        </Item>
+      {login ? (
+        <Form>
+          <Item style={{ borderColor: "transparent" }}>
+            <Body>
+              <Label style={{ fontSize: 20, fontWeight: "bold", margin: 20 }}>
+                Login
+              </Label>
+            </Body>
+          </Item>
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="username"
+              onChangeText={handleUsernameChange}
+            />
+          </Item>
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="password"
+              secureTextEntry={true}
+              onChangeText={handlePasswordChange}
+            />
+          </Item>
+          <Button onPress={signInAsync}>
+            <Body>
+              <Text style={{ fontWeight: "bold", color: "white" }}>
+                Sign In
+              </Text>
+            </Body>
+          </Button>
+          <Body>
+            <Text onPress={changeLoginStatus}>Not registered?</Text>
+          </Body>
         </Form>
-        <Button onPress={signInAsync}><Body><Text style={{fontWeight: "bold", color: 'white'}}>Sign In</Text></Body></Button>
-
-<Form>
-  <Item style={{borderColor: 'transparent'}}>
-  <Body><Label style={{fontSize: 20, fontWeight: 'bold', margin: 20}}>Register</Label></Body>
-      </Item>
-      <Item>
-        <FormTextInput
-          autoCapitalize="none"
-          placeholder="username"
-          onChangeText={handleUsernameChange}
-        />
-
-        </Item>
-        <Item>
-        <FormTextInput
-          autoCapitalize="none"
-          placeholder="password"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-        />
-
-        </Item>
-        <Item>
-        <FormTextInput
-          autoCapitalize="none"
-          placeholder="email"
-          onChangeText={handleEmailChange}
-        />
-        </Item>
-        <Button onPress={registerInAsync}><Body><Text style={{fontWeight: "bold", color: 'white'}}>Register</Text></Body></Button>
+      ) : (
+        <Form>
+          <Item style={{ borderColor: "transparent" }}>
+            <Body>
+              <Label style={{ fontSize: 20, fontWeight: "bold", margin: 20 }}>
+                Register
+              </Label>
+            </Body>
+          </Item>
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="username"
+              onChangeText={handleUsernameChange}
+            />
+          </Item>
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="password"
+              secureTextEntry={true}
+              onChangeText={handlePasswordChange}
+            />
+          </Item>
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="email"
+              onChangeText={handleEmailChange}
+            />
+          </Item>
+          <Button onPress={registerInAsync}>
+            <Body>
+              <Text style={{ fontWeight: "bold", color: "white" }}>
+                Register
+              </Text>
+            </Body>
+          </Button>
+          <Body>
+            <Text onPress={changeLoginStatus}>Back to login</Text>
+          </Body>
         </Form>
+      )}
     </Container>
   );
 };
 
-
 // proptypes here
 Login.propTypes = {
-  navigation: propTypes.object,
+  navigation: propTypes.object
 };
 
 export default Login;
