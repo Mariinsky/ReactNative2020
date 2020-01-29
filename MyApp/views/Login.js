@@ -1,19 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useSignUpForm from "../hooks/LoginHooks";
 import FormTextInput from "../components/FormTextInput";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, StyleSheet } from "react-native";
 import propTypes from "prop-types";
 import { login, getProfilePic } from "../hooks/APIhooks";
-import { Button, Container, Form, Item, Body, Text, Label } from "native-base";
+import {
+  Button,
+  Container,
+  Form,
+  Item,
+  Body,
+  Text,
+  Label,
+  Icon,
+  Toast
+} from "native-base";
 
 const Login = props => {
   // props is needed for navigation
+  const [userAvailable, setUserAvailable] = useState(true);
+  const checkUser = async text => {
+    try {
+      const response = await fetch(
+        "http://media.mw.metropolia.fi/wbma/users/username/" + text
+      );
+      const result = await response.json();
+      setUserAvailable(result.available);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   const {
     handleUsernameChange,
     handlePasswordChange,
     handleEmailChange,
     inputs
   } = useSignUpForm();
+
   const signInAsync = async () => {
     try {
       const json = await login(
@@ -48,6 +71,15 @@ const Login = props => {
   };
   const changeLoginStatus = () => setLogin(!login);
   let [login, setLogin] = useState(true);
+  useEffect(()=>{
+    if(!userAvailable) {
+    Toast.show({
+      text: 'Username already in use!',
+      buttonText: 'Ok',
+      duration: 3000
+    })
+  }
+  }, [userAvailable])
   return (
     <Container>
       {login ? (
@@ -82,7 +114,9 @@ const Login = props => {
             </Body>
           </Button>
           <Body>
-            <Text onPress={changeLoginStatus}>Not registered?</Text>
+            <Text onPress={changeLoginStatus} style={styles.text}>
+              Not registered?
+            </Text>
           </Body>
         </Form>
       ) : (
@@ -94,13 +128,21 @@ const Login = props => {
               </Label>
             </Body>
           </Item>
-          <Item>
-            <FormTextInput
-              autoCapitalize="none"
-              placeholder="username"
-              onChangeText={handleUsernameChange}
-            />
-          </Item>
+
+            <Item>
+              <FormTextInput
+                autoCapitalize="none"
+                placeholder="username"
+                onChangeText={handleUsernameChange}
+                onEndEditing={e => {
+                  checkUser(e.nativeEvent.text);
+                }}
+              />
+              {!userAvailable && <Icon name="close-circle" style={{color: 'red'}}/>}
+
+            </Item>
+
+
           <Item>
             <FormTextInput
               autoCapitalize="none"
@@ -124,14 +166,21 @@ const Login = props => {
             </Body>
           </Button>
           <Body>
-            <Text onPress={changeLoginStatus}>Back to login</Text>
+            <Text onPress={changeLoginStatus} style={styles.text}>
+              Back to login
+            </Text>
           </Body>
         </Form>
       )}
     </Container>
   );
 };
-
+const styles = StyleSheet.create({
+  text: {
+    marginTop: 5,
+    color: "#C2185B"
+  }
+});
 // proptypes here
 Login.propTypes = {
   navigation: propTypes.object

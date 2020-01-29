@@ -3,6 +3,7 @@ import Navigator from './navigators/Navigator'
 import {MediaProvider} from './contexts/MediaContext'
 import * as Expo from "expo";
 import * as Font from 'expo-font';
+import { Root } from 'native-base'
 
 
 const App = () => {
@@ -25,9 +26,11 @@ const App = () => {
     );
   }
   return (
+    <Root>
      <MediaProvider>
         <Navigator />
     </MediaProvider>
+    </Root>
 
   );
 };
