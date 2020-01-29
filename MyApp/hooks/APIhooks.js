@@ -42,6 +42,7 @@ const login = async (url,inputs) => {
     console.log('erroor', e.message)
   }
 }
+
 const getProfilePic = async ({user}) => {
   try {
     const response = await fetch(apiUrl + 'tags/avatar_' + user.user_id);

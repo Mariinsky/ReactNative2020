@@ -3,7 +3,7 @@ import useSignUpForm from "../hooks/LoginHooks";
 import FormTextInput from "../components/FormTextInput";
 import { AsyncStorage, StyleSheet } from "react-native";
 import propTypes from "prop-types";
-import { login, getProfilePic } from "../hooks/APIhooks";
+import { getProfilePic, login } from "../hooks/APIhooks";
 import {
   Button,
   Container,
@@ -20,21 +20,25 @@ const Login = props => {
   // props is needed for navigation
   const [userAvailable, setUserAvailable] = useState(true);
   const checkUser = async text => {
-    try {
-      const response = await fetch(
-        "http://media.mw.metropolia.fi/wbma/users/username/" + text
-      );
-      const result = await response.json();
-      setUserAvailable(result.available);
-    } catch (e) {
-      console.log(e.message);
+    if (valid.username == undefined) {
+      try {
+        const response = await fetch(
+          "http://media.mw.metropolia.fi/wbma/users/username/" + text
+        );
+        const result = await response.json();
+        setUserAvailable(result.available);
+      } catch (e) {
+        console.log(e.message);
+      }
     }
   };
   const {
     handleUsernameChange,
     handlePasswordChange,
     handleEmailChange,
-    inputs
+    handlePasswordCheck,
+    inputs,
+    valid
   } = useSignUpForm();
 
   const signInAsync = async () => {
@@ -54,35 +58,62 @@ const Login = props => {
     }
   };
   const registerInAsync = async () => {
-    try {
-      const json = await login(
-        "http://media.mw.metropolia.fi/wbma/users",
-        inputs
-      );
-      console.log("register", json);
-      if (json.user_id) {
-        signInAsync();
-      } else {
-        alert("registration failed.");
+    const checkValid = valid => {
+      let ok = false;
+      for (let it in vlid) {
+        if (valid[it] == undefined) {
+          ok = true;
+        } else {
+          ok = false;
+        }
       }
-    } catch (e) {
-      console.log("register error", e);
+      return ok;
+    };
+    if (checkValid) {
+      try {
+        const json = await login(
+          "http://media.mw.metropolia.fi/wbma/users",
+          inputs
+        );
+        if (json.user_id) {
+          signInAsync();
+        } else {
+          alert("registration failed.");
+        }
+      } catch (e) {
+        console.log("register error", e);
+      }
+    } else {
+      showToast("check registration form");
     }
   };
-  const changeLoginStatus = () => setLogin(!login);
-  let [login, setLogin] = useState(true);
-  useEffect(()=>{
-    if(!userAvailable) {
-    Toast.show({
-      text: 'Username already in use!',
-      buttonText: 'Ok',
-      duration: 3000
-    })
-  }
-  }, [userAvailable])
+  const changeLoginStatus = () => setFormToggle(!formToggle);
+  let [formToggle, setFormToggle] = useState(true);
+  useEffect(() => {
+    if (!userAvailable) {
+      Toast.show({
+        text: "Username already in use!",
+        buttonText: "Ok",
+        duration: 3000,
+        position: "top",
+        type: "warning"
+      });
+    }
+  }, [userAvailable]);
+  const showToast = message => {
+    if (message != undefined) {
+      Toast.show({
+        text: message,
+        buttonText: "Ok",
+        duration: 2000,
+        position: "top",
+        type: "warning"
+      });
+    }
+  };
   return (
     <Container>
-      {login ? (
+      {formToggle ? (
         <Form>
           <Item style={{ borderColor: "transparent" }}>
             <Body>
@@ -129,19 +160,23 @@ const Login = props => {
             </Body>
           </Item>
 
-            <Item>
-              <FormTextInput
-                autoCapitalize="none"
-                placeholder="username"
-                onChangeText={handleUsernameChange}
-                onEndEditing={e => {
-                  checkUser(e.nativeEvent.text);
-                }}
-              />
-              {!userAvailable && <Icon name="close-circle" style={{color: 'red'}}/>}
-
-            </Item>
-
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="username"
+              onChangeText={handleUsernameChange}
+              onEndEditing={e => {
+                checkUser(e.nativeEvent.text);
+                showToast(valid.username);
+              }}
+            />
+            {!userAvailable && (
+              <Icon name="close-circle" style={{ color: "red" }} />
+            )}
+            {valid.username != undefined && (
+              <Icon name="close-circle" style={{ color: "red" }} />
+            )}
+          </Item>
 
           <Item>
             <FormTextInput
@@ -149,14 +184,34 @@ const Login = props => {
               placeholder="password"
               secureTextEntry={true}
               onChangeText={handlePasswordChange}
+              onEndEditing={e => showToast(valid.password)}
             />
+            {valid.password != undefined && (
+              <Icon name="close-circle" style={{ color: "red" }} />
+            )}
+          </Item>
+          <Item>
+            <FormTextInput
+              autoCapitalize="none"
+              placeholder="repeat passowrd"
+              secureTextEntry={true}
+              onChangeText={handlePasswordCheck}
+              onEndEditing={e => showToast(valid.passCheck)}
+            />
+            {valid.passCheck != undefined && (
+              <Icon name="close-circle" style={{ color: "red" }} />
+            )}
           </Item>
           <Item>
             <FormTextInput
               autoCapitalize="none"
               placeholder="email"
               onChangeText={handleEmailChange}
+              onEndEditing={e => showToast(valid.email)}
             />
+            {valid.email != undefined && (
+              <Icon name="close-circle" style={{ color: "red" }} />
+            )}
           </Item>
           <Button onPress={registerInAsync}>
             <Body>
