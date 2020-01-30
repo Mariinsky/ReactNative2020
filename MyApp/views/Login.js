@@ -60,16 +60,17 @@ const Login = props => {
   const registerInAsync = async () => {
     const checkValid = valid => {
       let ok = false;
-      for (let it in vlid) {
+      for (let it in valid) {
         if (valid[it] == undefined) {
-          ok = true;
+          ok = !ok;
         } else {
-          ok = false;
+          ok = !ok;
         }
       }
-      return ok;
+       return ok;
+
     };
-    if (checkValid) {
+    if (checkValid()) {
       try {
         const json = await login(
           "http://media.mw.metropolia.fi/wbma/users",
@@ -185,6 +186,7 @@ const Login = props => {
               secureTextEntry={true}
               onChangeText={handlePasswordChange}
               onEndEditing={e => showToast(valid.password)}
+
             />
             {valid.password != undefined && (
               <Icon name="close-circle" style={{ color: "red" }} />
@@ -193,10 +195,11 @@ const Login = props => {
           <Item>
             <FormTextInput
               autoCapitalize="none"
-              placeholder="repeat passowrd"
+              placeholder="repeat password"
               secureTextEntry={true}
               onChangeText={handlePasswordCheck}
               onEndEditing={e => showToast(valid.passCheck)}
+
             />
             {valid.passCheck != undefined && (
               <Icon name="close-circle" style={{ color: "red" }} />
