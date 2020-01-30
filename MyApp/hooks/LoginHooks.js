@@ -31,33 +31,35 @@ const constraints = {
 };
 
 const useSignUpForm = () => {
+
   const [inputs, setInputs] = useState({});
   const [valid, setValid] = useState({});
-  const handleUsernameChange = text => {
-    const val = validate({ username: text }, constraints);
-    setValid(valid => ({
-      ...valid,
-      username: val.username
-    }));
-    setInputs(inputs => ({
-      ...inputs,
-      username: text
-    }));
-  };
-  const handlePasswordChange = text => {
-    const val = validate({ password: text }, constraints);
-    setValid(valid => ({
-      ...valid,
-      password: val.password
-    }));
 
+  const useSetInputs = (attr, value)=>{
     setInputs(inputs => ({
       ...inputs,
-      password: text
+      [attr]: value
     }));
+    const val = validate({ [attr]: value }, constraints);
+    setValid(valid => ({
+      ...valid,
+      [attr]: val[attr]
+    }));
+  }
+
+  const handleUsernameChange = text => {
+    useSetInputs('username', text);
   };
+
+  const handlePasswordChange = text => {
+    useSetInputs('password', text)
+  };
+
+  const handleEmailChange = text => {
+    useSetInputs('email', text)
+  };
+
   const handlePasswordCheck = text => {
-    console.log(valid);
     if (text != inputs.password) {
       setValid(valid => ({
         ...valid,
@@ -71,17 +73,7 @@ const useSignUpForm = () => {
     }
   };
 
-  const handleEmailChange = text => {
-    const val = validate({ email: text }, constraints);
-    setValid(valid => ({
-      ...valid,
-      email: val.email
-    }));
-    setInputs(inputs => ({
-      ...inputs,
-      email: text
-    }));
-  };
+
   return {
     handleUsernameChange,
     handlePasswordChange,
