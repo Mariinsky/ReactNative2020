@@ -45,6 +45,7 @@ const useSignUpForm = () => {
       ...valid,
       [attr]: val[attr]
     }));
+    console.log(val)
   }
 
   const handleUsernameChange = text => {
