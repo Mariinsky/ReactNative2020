@@ -6,6 +6,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Single from '../views/Single';
+import Upload from '../views/Upload';
 import AuthLoading from '../views/AuthLoading';
 import Login from '../views/Login';
 import {Icon} from 'native-base';
@@ -14,6 +15,7 @@ const TabNavigator = createBottomTabNavigator(
     {
       Home,
       Profile,
+      Upload,
     },
     {
       defaultNavigationOptions: ({navigation}) => ({
@@ -24,6 +26,8 @@ const TabNavigator = createBottomTabNavigator(
             iconName = 'home';
           } else if (routeName === 'Profile') {
             iconName = 'person';
+          } else if (routeName === 'Upload') {
+            iconName = 'add';
           }
 
           // You can return any component that you like here!
