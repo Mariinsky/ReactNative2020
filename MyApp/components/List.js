@@ -1,35 +1,31 @@
-import React, { useContext, useEffect } from "react";
-import {  Image, Dimensions, View, Text } from "react-native";
-import ListItem from "./ListItem";
-import PropTypes from "prop-types";
-import { MediaContext } from "../contexts/MediaContext";
-import { getAllMedia } from "../hooks/APIhooks";
-import {List as BaseList } from 'native-base'
+/* eslint-disable max-len */
+import React, {useContext} from 'react';
+import {
+  List as BaseList,
+} from 'native-base';
+import ListItem from './ListItem';
+import {MediaContext} from '../contexts/MediaContext';
+import {getAllMedia} from '../hooks/APIHooks';
+import PropTypes from 'prop-types';
 
-
-const List = props => {
+const List = (props) => {
   const [media, setMedia] = useContext(MediaContext);
-  const [data, loading] = getAllMedia();
-
-  useEffect(() => {
-    setMedia(data);
-  }, [loading]);
+  const [data] = getAllMedia();
+  setMedia(data);
   return (
     <BaseList
-    dataArray={media}
-    renderRow={
-      (item) => <ListItem
+      dataArray={media}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({item}) => <ListItem
         navigation={props.navigation}
         singleMedia={item}
-      />
-    }
-    keyExtractor={(item, index) => index.toString()}
-  />
+      />}
+    />
   );
 };
 
 List.propTypes = {
-  mediaArray: PropTypes.array
+  navigation: PropTypes.object,
 };
 
 export default List;

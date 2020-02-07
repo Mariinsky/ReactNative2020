@@ -1,26 +1,62 @@
-import React from "react";
-import { Image } from "react-native";
-import { Container, Body, Text} from 'native-base'
+import React from 'react';
+import {
+  Container,
+  Content,
+  Card,
+  CardItem,
+  Left,
+  Body,
+  H3,
+  Icon,
+  Text,
+} from 'native-base';
+import PropTypes from 'prop-types';
+import AsyncImage from '../components/AsyncImage';
+import {Dimensions} from 'react-native';
 
-const Single = props => {
-  const { navigation } = props;
+const deviceHeight = Dimensions.get('window').height;
+
+console.log('dh', deviceHeight);
+
+const mediaURL = 'http://media.mw.metropolia.fi/wbma/uploads/';
+
+const Single = (props) => {
+  const {navigation} = props;
+  console.log('Singel navi', navigation.state);
+  const file = navigation.state.params.file;
   return (
     <Container>
-      <Body>
-      <Image
-        style={{width: 300, height: 300, resizeMode: 'contain', marginTop:20}}
-        source={{
-          uri:
-            "http://media.mw.metropolia.fi/wbma/uploads/" +
-            navigation.getParam("filename", "no_filename")
-        }}
-      />
-      <Text style={{fontSize: 30, fontWeight: 'bold'}}>{ navigation.getParam("title", "no_title")}</Text>
-      <Text style={{marginTop: 10}}>{navigation.getParam('description', 'no_descrtiption')}</Text>
-      </Body>
+      <Content>
+        <Card>
+          <CardItem>
+            <AsyncImage
+              style={{
+                width: '100%',
+                height: deviceHeight / 2,
+              }}
+              spinnerColor='#777'
+              source={{uri: mediaURL + file.filename}}
+            />
+          </CardItem>
+          <CardItem>
+            <Left>
+              <Icon name='image'/>
+              <Body>
+                <H3>{file.title}</H3>
+                <Text>{file.description}</Text>
+                <Text>By {file.user_id}</Text>
+              </Body>
+            </Left>
+          </CardItem>
+        </Card>
+      </Content>
     </Container>
   );
 };
 
+Single.propTypes = {
+  navigation: PropTypes.object,
+  file: PropTypes.object,
+};
 
 export default Single;

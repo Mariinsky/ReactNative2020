@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+import React from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -6,38 +8,47 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import AuthLoading from '../views/AuthLoading';
 import Login from '../views/Login';
-import React from 'react';
-import { Icon } from 'native-base'
+import {Icon} from 'native-base';
 
 const TabNavigator = createBottomTabNavigator(
-  {
-    Home,
-    Profile,
-  },
-
-  {
-    defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: () => {
-        const {routeName} = navigation.state;
-        let iconName;
-        if (routeName === 'Home') {
-          iconName = 'home';
-        } else if (routeName === 'Profile') {
-          iconName = 'person';
-        }
-
-        // You can return any component that you like here!
-        return <Icon
-          name={iconName}
-          size={25}
-        />;
-      },
-    }),
-    tabBarOptions: {
-      showLabel: false,
+    {
+      Home,
+      Profile,
     },
-  }
+    {
+      defaultNavigationOptions: ({navigation}) => ({
+        tabBarIcon: () => {
+          const {routeName} = navigation.state;
+          let iconName;
+          if (routeName === 'Home') {
+            iconName = 'home';
+          } else if (routeName === 'Profile') {
+            iconName = 'person';
+          }
+
+          // You can return any component that you like here!
+          return <Icon
+            name={iconName}
+            size={25}
+          />;
+        },
+      }),
+      tabBarOptions: {
+        activeTintColor: '#000',
+      },
+    },
 );
+
+TabNavigator.navigationOptions = ({navigation}) => {
+  const {routeName} = navigation.state.routes[navigation.state.index];
+
+  // You can do whatever you like here to pick the title based on the route name
+  const headerTitle = routeName;
+
+  return {
+    headerTitle,
+  };
+};
 
 const StackNavigator = createStackNavigator(
     // RouteConfigs
@@ -45,27 +56,11 @@ const StackNavigator = createStackNavigator(
       Home: {
         screen: TabNavigator,
         navigationOptions: {
-          headerShown: false, // this will hide the header
-          headerStyle: {
-                       backgroundColor: '#f3e5f5',
-          },
-          headerTintColor: '#6a1b9a',
-          headerTitleStyle: {
-          fontWeight: 'bold',
-          },
+          headerMode: 'none', // this will hide the header
         },
       },
       Single: {
         screen: Single,
-        navigationOptions: {
-          headerStyle: {
-            backgroundColor: '#f3e5f5',
-          },
-          headerTintColor: '#6a1b9a',
-          headerTitleStyle: {
-          fontWeight: 'bold',
-          },
-        },
       },
       Logout: {
         screen: Login,
@@ -74,14 +69,14 @@ const StackNavigator = createStackNavigator(
 );
 
 const Navigator = createSwitchNavigator(
-  {
-    AuthLoading: AuthLoading,
-    App: StackNavigator,
-    Auth: Login,
-  },
-  {
-    initialRouteName: 'AuthLoading',
-  }
+    {
+      AuthLoading: AuthLoading,
+      App: StackNavigator,
+      Auth: Login,
+    },
+    {
+      initialRouteName: 'AuthLoading',
+    },
 );
 
 export default createAppContainer(Navigator);
