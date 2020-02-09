@@ -50,7 +50,9 @@ const Login = (props) => {
   };
 
   const signInAsync = async () => {
+
     try {
+      console.log(inputs)
       const user = await fetchPOST('login', inputs);
       console.log('Login', user);
       await AsyncStorage.setItem('userToken', user.token);

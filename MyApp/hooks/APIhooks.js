@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import {AsyncStorage} from 'react-native';
 
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
 
@@ -25,9 +26,10 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
     },
     body: JSON.stringify(data),
   };
+  console.log(apiUrl + endpoint)
   const response = await fetch(apiUrl + endpoint, fetchOptions);
   const json = await response.json();
-  console.log(json);
+  console.log(response);
   if (response.status === 400 || response.status === 401) {
     const message = Object.values(json).join();
     throw new Error(message);
@@ -59,4 +61,17 @@ const getAllMedia = () => {
   return [data, loading];
 };
 
-export {getAllMedia, fetchGET, fetchPOST};
+const uploadImage = async (data) => {
+  const token = await AsyncStorage.getItem('userToken');
+  const response = await fetch ('http://media.mw.metropolia.fi/wbma/media', {
+    method: "POST",
+    body: data,
+    headers: {
+      "content-type": "multipart/form-data",
+      "x-access-token": token,
+    },
+  });
+  return response.json();
+};
+
+export {getAllMedia, fetchGET, fetchPOST, uploadImage};
