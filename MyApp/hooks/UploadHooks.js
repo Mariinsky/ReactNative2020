@@ -15,6 +15,7 @@ const constraints = {
 const useUploadForm = () => {
   const [inputs, setInputs] = useState({});
   const [valid, setValid] = useState({});
+  const [uploading, setUploading] = useState({});
 
   const validateInput = (attr, value) => {
     const validated = validate({[attr]: value}, constraints);
@@ -69,6 +70,7 @@ const useUploadForm = () => {
     }
     console.log('formData', formData)
     await uploadImage(formData);
+
   };
 
   return {
@@ -79,6 +81,7 @@ const useUploadForm = () => {
     inputs,
     valid,
     resetText,
+    uploading,
   };
 };
 

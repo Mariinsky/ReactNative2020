@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 const List = (props) => {
   const [media, setMedia] = useContext(MediaContext);
-  const [data] = getAllMedia();
+  const [data, loading] = getAllMedia();
   setMedia(data);
   return (
     <BaseList

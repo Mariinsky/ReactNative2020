@@ -1,6 +1,6 @@
 import React, {useState, } from 'react';
 import {Text, Button, Form, Body, Item, Container, Label, Right, } from "native-base";
-import {Image, Dimensions, StyleSheet} from 'react-native';
+import {Image, Dimensions, StyleSheet, ActivityIndicator} from 'react-native';
 import FormTextInput from "../components/FormTextInput";
 import useUploadForm from "../hooks/UploadHooks";
 import * as ImagePicker from "expo-image-picker";
@@ -15,6 +15,7 @@ const Upload = (props) => {
     validateInput,
     handleUpload,
     resetText,
+
   } = useUploadForm();
 
 
@@ -39,9 +40,10 @@ const Upload = (props) => {
     resetText("title", "");
     resetText("postText", "");
   };
-
+  const [loading, setLoading] = useState(false);
   return (
     <Container>
+      {!loading ? (
       <Form>
         <Item style={{borderColor: "transparent"}}>
           <Body>
@@ -77,6 +79,7 @@ const Upload = (props) => {
         {!valid.title && image &&
         <Form>
           <Button primary onPress={async () => {
+            setLoading(true);
             await handleUpload(image);
             props.navigation.replace("Home");
           }}>
@@ -91,8 +94,7 @@ const Upload = (props) => {
           </Button>
         </Form>
         }
-      </Form>
-      {image &&
+        {image &&
       <Item>
         <Body>
           <Text style={{fontWeight: "bold", fontSize: 30,}}>Selected image</Text>
@@ -100,6 +102,10 @@ const Upload = (props) => {
         </Body>
       </Item>
       }
+
+      </Form>
+      ):(<ActivityIndicator size="large" color="#0000ff" />)}
+
     </Container>
   );
 };

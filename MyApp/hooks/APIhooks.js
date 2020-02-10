@@ -46,7 +46,8 @@ const getAllMedia = () => {
   const fetchMedia = async () => {
     try {
       const json = await fetchGET('media/all');
-      const result = await Promise.all(json.files.map(async (item) => {
+      // slice for only last 20
+      const result = await Promise.all(json.files.reverse().slice(0, 20).map(async (item) => {
         return await fetchGET('media', item.file_id);
       }));
       setData(result);
@@ -63,6 +64,7 @@ const getAllMedia = () => {
 
 const uploadImage = async (data) => {
   const token = await AsyncStorage.getItem('userToken');
+  try {
   const response = await fetch ('http://media.mw.metropolia.fi/wbma/media', {
     method: "POST",
     body: data,
@@ -71,7 +73,10 @@ const uploadImage = async (data) => {
       "x-access-token": token,
     },
   });
-  return response.json();
+  } catch (e) {
+    console.log('upload image error: ', e.message);
+  }
+
 };
 
 export {getAllMedia, fetchGET, fetchPOST, uploadImage};
