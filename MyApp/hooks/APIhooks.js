@@ -14,6 +14,7 @@ const fetchGET = async (endpoint = '', params = '', token = '') => {
   if (!response.ok) {
     throw new Error('fetchGET error: ' + response.status);
   }
+
   return await response.json();
 };
 
@@ -26,10 +27,8 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
     },
     body: JSON.stringify(data),
   };
-  console.log(apiUrl + endpoint)
   const response = await fetch(apiUrl + endpoint, fetchOptions);
   const json = await response.json();
-  console.log(response);
   if (response.status === 400 || response.status === 401) {
     const message = Object.values(json).join();
     throw new Error(message);
@@ -39,7 +38,51 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
   return json;
 };
 
+const fetchDELETE = async (endpoint = '', params = '', token = '') => {
+  console.log('delete: ',apiUrl + endpoint + '/' + params);
+  const fetchOptions = {
+    method: 'DELETE',
+    headers: {
+      'x-access-token': token,
+    },
+  };
+   const response = await fetch(apiUrl + endpoint + '/' + params,
+      fetchOptions);
+  if (!response.ok) {
+    throw new Error('fetchGET error: ' + response.status);
+  }
+  console.log('delete response: ', await response.json() )
+  return await response.json();
+};
 
+const isLiked = async(file_id) => {
+  try {
+  const arr = await fetchGET('favourites/file', file_id);
+  const userFromStorage = await AsyncStorage.getItem('user');
+  const user = JSON.parse(userFromStorage);
+  return arr.find(it => it.user_id === user.user_id)
+  } catch (e) {
+    console.log(e.message)
+  }
+}
+
+const postFavourite = async (file_id) => {
+  const token =  await AsyncStorage.getItem('userToken')
+  if(await isLiked(file_id) === undefined) {
+    try {
+      await fetchPOST('favourites', {file_id:file_id},token);
+    } catch (e) {
+      console.log(e.message);
+    }
+  } else {
+    try {
+      await fetchDELETE('favourites/file', file_id, token);
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+}
 const getAllMedia = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -79,4 +122,4 @@ const uploadImage = async (data) => {
 
 };
 
-export {getAllMedia, fetchGET, fetchPOST, uploadImage};
+export {getAllMedia, fetchGET, fetchPOST, uploadImage, postFavourite, isLiked};
