@@ -104,6 +104,27 @@ const getAllMedia = () => {
   }, []);
   return [data, loading];
 };
+const getAllUserMedia = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const fetchMedia = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken')
+      const json = await fetchGET('media/user', '', token);
+      const result = await Promise.all(json.map(async (item) => {
+        return await fetchGET('media', item.file_id);
+      }));
+      setData(result);
+      setLoading(false);
+    } catch (e) {
+      console.log('getAllUserMedia error', e.message);
+    }
+  };
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+  return [data, loading];
+};
 
 const uploadImage = async (data) => {
   const token = await AsyncStorage.getItem('userToken');
@@ -122,4 +143,4 @@ const uploadImage = async (data) => {
 
 };
 
-export {getAllMedia, fetchGET, fetchPOST, uploadImage, postFavourite, isLiked};
+export {getAllMedia, fetchGET, fetchPOST, uploadImage, postFavourite, isLiked, getAllUserMedia};

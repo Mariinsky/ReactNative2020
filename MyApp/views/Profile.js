@@ -87,6 +87,9 @@ const Profile = (props) => {
               <Button full onPress={signOutAsync}>
                 <Text>Logout</Text>
               </Button>
+              <Button full onPress={() => {props.navigation.navigate('MyFiles', user)}}>
+                <Text>MyFIles</Text>
+              </Button>
             </Body>
           </CardItem>
         </Card>
