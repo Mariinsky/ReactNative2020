@@ -29,7 +29,7 @@ const ListItem = (props) => {
       <Right>
         <Button onPress={
           () => {
-            props.navigation.push('Single', {file: props.singleMedia});
+            props.navigation.push('Single', {file: props.singleMedia, user: props.user});
           }
         }>
           <Text>View</Text>

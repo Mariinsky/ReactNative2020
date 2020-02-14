@@ -29,7 +29,6 @@ const Profile = (props) => {
       const userFromStorage = await AsyncStorage.getItem('user');
       const uData = JSON.parse(userFromStorage);
       const avatarPic = await fetchGET('tags', 'avatar_' + uData.user_id);
-      console.log('avpic', avatarPic);
       let avPic = '';
       if (avatarPic.length === 0) { // if avatar is not set
         avPic = 'https://placekitten.com/1024/1024';
@@ -87,7 +86,7 @@ const Profile = (props) => {
               <Button full onPress={signOutAsync}>
                 <Text>Logout</Text>
               </Button>
-              <Button full onPress={() => {props.navigation.navigate('MyFiles', user)}}>
+              <Button full onPress={() => {props.navigation.navigate('MyFiles', {user: user})}}>
                 <Text>MyFIles</Text>
               </Button>
             </Body>

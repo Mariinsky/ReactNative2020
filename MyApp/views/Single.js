@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AsyncImage from "../components/AsyncImage";
 import { Dimensions } from "react-native";
 import { Video } from "expo-av";
-import { fetchGET, postFavourite, isLiked} from '../hooks/APIHooks'
+import { fetchGET, postFavourite, isLiked, deletePost} from '../hooks/APIHooks'
 
 
 const deviceHeight = Dimensions.get("window").height;
@@ -27,6 +27,7 @@ const Single = props => {
   const [liked, setLiked] = useState()
   const { navigation } = props;
   const file = navigation.state.params.file;
+  const owner = navigation.state.params.user;
   const [user, setUser] = useState({});
   const getUser = async () => {
     try {
@@ -92,10 +93,15 @@ const Single = props => {
            <Button transparent onPress={() => {putLike(file.file_id)}}>
              {liked === undefined && <Icon name="heart" />}
              {liked !== undefined && <Icon name="add"/>}
-
-
-            </Button>
+           </Button>
           </CardItem>
+          {owner === file.user_id &&
+          <CardItem>
+            <Button full onPress={ ()=> {deletePost(file.file_id)
+            }}>
+              <Text>DELETE</Text>
+              </Button>
+          </CardItem>}
         </Card>
       </Content>
     </Container>

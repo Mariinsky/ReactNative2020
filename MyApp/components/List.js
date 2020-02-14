@@ -19,6 +19,7 @@ const List = (props) => {
       renderItem={({item}) => <ListItem
         navigation={props.navigation}
         singleMedia={item}
+        user={undefined}
       />}
     />
   );

@@ -39,7 +39,6 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
 };
 
 const fetchDELETE = async (endpoint = '', params = '', token = '') => {
-  console.log('delete: ',apiUrl + endpoint + '/' + params);
   const fetchOptions = {
     method: 'DELETE',
     headers: {
@@ -54,6 +53,16 @@ const fetchDELETE = async (endpoint = '', params = '', token = '') => {
   console.log('delete response: ', await response.json() )
   return await response.json();
 };
+
+const deletePost = async (id) => {
+  try {
+  const token =  await AsyncStorage.getItem('userToken')
+  const result = fetchDELETE('media',id, token);
+  console.log(result);
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 const isLiked = async(file_id) => {
   try {
@@ -143,4 +152,4 @@ const uploadImage = async (data) => {
 
 };
 
-export {getAllMedia, fetchGET, fetchPOST, uploadImage, postFavourite, isLiked, getAllUserMedia};
+export {getAllMedia, fetchGET, fetchPOST, uploadImage, postFavourite, isLiked, getAllUserMedia, deletePost};
